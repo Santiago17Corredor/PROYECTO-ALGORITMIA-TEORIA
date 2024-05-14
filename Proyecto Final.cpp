@@ -6,27 +6,17 @@ using namespace std;
 string PalabraMayus(const string& palabra);
 void cifrar();
 void descifrar();
+int inicio();
 
 int main(){
-    int a=3;
-
-    cout<<"Que desea hacer?"<<endl;
-    cout<<" 1)Cifrar \n 2)Descifrar \n 3)Salir"<<endl;
-    cin>>a;
-
-while(a>3 || a<1){
-    cout << "esa no es una opcion, escoja otra" << endl;
-    cout << "Que desea hacer?" << endl;
-    cout << " 1)Cifrar \n 2)Descifrar \n 3)Salir" << endl;
-cin>>a;}
-
-    cout<<"usted escogio "<<a<<endl;
-
-if(a==1){
-
-cifrar();}}
-
- string PalabraMayus(const string& palabra){
+    int b= inicio();
+    if(b==1){
+        cifrar();
+    }else if(b==2){
+        descifrar();
+    }
+    }
+string PalabraMayus(const string& palabra){
     string palabraMayuscula;
     palabraMayuscula = palabra;
     for(char& c:palabraMayuscula){
@@ -34,106 +24,74 @@ cifrar();}}
             c = toupper(c);
         }
     }
-     return palabraMayuscula;
- }
-
-
-
-
+    return palabraMayuscula;
+}
 void cifrar() {
-    char matriz[26][26];
-    string alf = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    int r, k;
-    string palabra;
-    string clave;
+    string alf = "ABCDEFGHIJKLMNOPQRSTXYZ";
     string paci;
     string palabracifrada;
-    string palabra2;
-    int po = 0, longitudPalabra = 0, longitudClave = 0;
+    string palabra;
+    string clave;
+    string cifrada;
 
-    cout << "-----------------------------------------" << endl;
-    //crear matriz de vigenere
+    cout<<"digite palabra"<<endl;
+    cin>>palabra;
 
-    for (int fila = 0; fila < 26; fila++) {
-        r = fila;
-        for (int columna = 0; columna < 26; columna++) {
-            //sacamos %26 para que al llegar al tope, se repita la string
-            matriz[fila][columna] = alf[r % 26];
-            r++;
-        }
-    }
-
-    cout << " digite la palabra a cifrar (sin espacios)" << endl;
-    cin >> palabra;
-//convertir palabra a mayusculas silenciosamente con funcion
     string PalabraMayuscula = PalabraMayus(palabra);
-
-    //cout<<PalabraMayuscula<<endl;
     palabra=PalabraMayuscula;
-    paci=palabra;
+
+    cout<<"digite clave"<<endl;
+    cin>>clave;
+
+    string ClaveMayuscula = PalabraMayus(clave);
+    clave=ClaveMayuscula;
 
 
-    cout << "digite la clave" << endl;
-    cin >> clave;
-    //convertir tambien clave a mayusculas usando funcion creada
-     string ClaveMayuscula = PalabraMayus(clave);
-     clave=ClaveMayuscula;
-     //cout<<clave;
-
-    longitudPalabra = palabra.length();
-    longitudClave = clave.length();
-
-//cuantos caracteres tiene la palabra que se quiere cifrar:
-    //cout << "la palabra a cifrar tiene: " << longitudPalabra << " caracteres" << endl;
-
-//arrastrar la clave conforme la palabra
-    for (po = 0; po < longitudPalabra; po++) {
-        paci[po] = clave[po % longitudClave];
+    for (int po = 0; po <palabra.length(); po++) {//pedro 5,
+        paci += clave[po % clave.length()];
     }
 
-//impresiones de datos hasta el momento..
-cout<<"REGISTRO DE DATOS INGRESADOS: "<<endl;
-    cout << "la palabra original es: " << palabra << endl;
-    cout << "la palabra medio cifrada es: " << paci << endl;
-    cout << "------------es hora de cifrar------------" << endl;
-    cout << endl;
-    cout << "---------------matriz de vigenere---------------" << endl;
+    for(int h=0;h<palabra.length();h++){
+        //cout<<(int(palabra[h])-65)<<" "<<(char(palabra[h]))<<" ";
+        //cout<<(int(clave[h])-65)<<" "<<(char(clave[h]))<<" "<<endl;
+        palabracifrada += char((((int(palabra[h]-65))+(int(paci[h]-65)))%26)+65);}
+    cout<<"La palabra cifrada es: ";
+    cout<<palabracifrada;}
+void descifrar() {
+    int pr=0;
+    string pade;
+    string palabracifrada;
+    string clave;
+    string clave2;
+    cout<<"digite la palabra cifrada"<<endl;
+    cin>>palabracifrada;
 
-    //impresion de la matriz de vigenere creada anteriormente
-    for (int fila = 0; fila < 26; fila++) {
-        for (int columna = 0; columna < 26; columna++) {
-            cout << matriz[fila][columna] << "|";
-        }
-        cout << endl;
+    string PalabraMayuscula = PalabraMayus(palabracifrada);
+    palabracifrada=PalabraMayuscula;
+
+    cout<<"digite clave"<<endl;
+    cin>>clave;
+
+    string ClaveMayuscula = PalabraMayus(clave);
+    clave=ClaveMayuscula;
+
+    for (int po = 0; po <palabracifrada.length(); po++) {//pedro 5,
+        clave2 += clave[po % clave.length()];
     }
-    cout << endl;
-    cout <<"-----en base a la tabla anterior cifraremos el mensaje-----"<<endl;
-    cout << endl;
+    for(int h=0;h<palabracifrada.length();h++){
 
-    int posicioncol;
-    int posicionfil;
-    //proceso de cifrado del mensaje
-    for (int h = 0; h < longitudPalabra; h++) {
-
-        for (int columna = 0; columna < 26; columna++) {
-            if (palabra[h] == matriz[0][columna]) {
-                //cout << "encontraste " << matriz[0][columna] << "!!!" << endl;
-                posicioncol = columna;
-                //cout << posicioncol << endl;
-
-                for (int fila = 0; fila < 26; fila++) {
-
-                    if (paci[h] == matriz[fila][0]) {
-                        //cout << "encontraste " << matriz[fila][0] << "!!!" << endl;
-                        posicionfil = fila;
-                        //cout << posicionfil << endl;
-                    }
-                }
-                //imprimir caracter interseccion
-                palabracifrada+= matriz[posicionfil][posicioncol];
-            }
-        }
+        pade+=char(((((int(palabracifrada[h]-65))-(int(clave2[h]-65)))+26)%26)+65);
     }
-    cout<<"La palabra ciifrada es: "<<palabracifrada;
+    cout<<"la palabra descifrada es: "<<pade;
 }
+int inicio() {
 
+    int a;
+    while(a>3 || a<1){
+        cout << "esa no es una opcion, escoja otra" <<endl;
+        cout << "Que desea hacer?" <<endl;
+        cout << " 1)Cifrar \n 2)Descifrar \n 3)Salir" <<endl;
+        cin>>a;}
+    return a;
+}
+      
