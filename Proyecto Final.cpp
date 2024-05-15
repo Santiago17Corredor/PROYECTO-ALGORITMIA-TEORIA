@@ -54,7 +54,7 @@ void cifrar() {
     for(int h=0;h<palabra.length();h++){
         //cout<<(int(palabra[h])-65)<<" "<<(char(palabra[h]))<<" ";
         //cout<<(int(clave[h])-65)<<" "<<(char(clave[h]))<<" "<<endl;
-        palabracifrada += char((((int(palabra[h]-65))+(int(paci[h]-65)))%26)+65);}
+        palabracifrada += char((((palabra[h]-65)+(paci[h]-65))%26)+65);}
     cout<<"La palabra cifrada es: ";
     cout<<palabracifrada;}
 void descifrar() {
